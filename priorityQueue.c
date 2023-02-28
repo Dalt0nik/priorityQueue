@@ -85,6 +85,8 @@ int peek(priorityQueue* pq, int* topValue, int* topPriority)
     
     *topValue = pq->front->value;
     *topPriority = pq->front->priority;
+
+    return 1;
 }
 
 int deleteQ(priorityQueue* pq)
