@@ -3,7 +3,6 @@
 #include "priorityQueue.h"
 
 
-void printQ(priorityQueue* pq);
 void printIndex(priorityQueue* pqList[]);
 int chooseQ(priorityQueue* pqList[], int pqListSize);
 
@@ -107,11 +106,7 @@ int main()
             printf("-> Programa uzdaryta\n");
             loop = 0;
 
-            break;
-        case 9:
-            pqChoice = chooseQ(pqList, pqListSize);
-            printQ(pqList[pqChoice]);
-            break;   
+            break;  
         default:       
             printf("Tokia komanda neegzistuoja\n");
             break;
@@ -120,17 +115,6 @@ int main()
     return 0;
 }
 
-void printQ(priorityQueue *pq)
-{
-    node* nextNode = pq->front;
-    printf("front ->");
-    while(nextNode != NULL)
-    {
-        printf(" %d(%d) ",nextNode->value, nextNode->priority);
-        nextNode = nextNode->next;
-    }
-    printf("\n");
-}
 
 void printIndex(priorityQueue* pqList[])
 {
