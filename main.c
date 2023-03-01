@@ -16,7 +16,7 @@ int main()
     {
         printf("\n\n\n[1] - Create\n[2] - isEmpty\n[3] - isFull\n[4] - Insert\n[5] - Pop\n[6] - Peek\n[7] - Delete\n[8] - Exit\n\n");
 
-        printf("Iveskite komanda ir paspauskite Enter: ");
+        printf("Iveskite komandos numeri ir paspauskite Enter: ");
         scanf("%d", &command);
         printf("\n\n");
         int i = 0;
@@ -60,7 +60,7 @@ int main()
             if(pqChoice == -1)
                 break;
             
-            printf("Iveskite per tarpa nauja reiksme ir jos prioriteta, paspauskite Enter:\n");
+            printf("Iveskite per tarpa nauja reiksme ir jos prioriteta (mazesnis skaicius = didesnis prioritetas), paspauskite Enter:\n");
             scanf("%d %d", &newValue, &newPr);
           
             if(insert(pqList[pqChoice], newValue, newPr) == 1)
@@ -139,7 +139,7 @@ int chooseQ(priorityQueue* pqList[], int pqListSize)
     scanf("%d", &pqChoice);
     printf("\n\n");
 
-    if(pqList[pqChoice] == NULL)
+    if(pqList[pqChoice] == NULL || pqChoice < 0 || pqChoice > 99)
     {
         printf("Eile #%d neegzistuoja\n",pqChoice);
         return -1;
