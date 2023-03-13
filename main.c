@@ -4,17 +4,21 @@
 
 
 void printIndex(priorityQueue* pqList[]);
-int chooseQ(priorityQueue* pqList[], int pqListSize);
+int chooseQ(priorityQueue* pqList[], int pqListSize, char errorCodes[10][100]);
+void printQ(priorityQueue *pq);
 
 int main()
 {
     int loop = 1, command, pqChoice, newValue, newPr, poppedValue, value, pr, pqListSize = 0;
+
+    char errorCodes[10][100] = {"Tokia komanda neegzistuoja\n", "Nesukurta jokiu prioritetiniu eiliu\n", "Tokia eile neegzistuoja\n", "-> Naujas elementas nebuvo pridetas, pasirinkta eile yra pilna\n","-> Virsutinis elementas nebuvo pasalintas, pasirinkta eile yra tuscia\n", "-> Virsutinio elemento nera, pasirinkta eile yra tuscia\n"};
+
     priorityQueue* pqList[100] = {NULL};
     printf("Priority Queue\n\n");
 
     while(loop == 1)
     {
-        printf("\n\n\n[1] - Create\n[2] - isEmpty\n[3] - isFull\n[4] - Insert\n[5] - Pop\n[6] - Peek\n[7] - Delete\n[8] - Exit\n\n");
+        printf("\n\n\n[1] - Sukurti (create)\n[2] - Ar suscia (isEmpty)\n[3] - Ar pilna (isFull)\n[4] - Ideti (Insert)\n[5] - Isimti elementa (Pop)\n[6] - Paziureti virsutini (Peek)\n[7] - Pasalinti eile (Delete)\n[8] - Uzbaigti (Exit)\n\n[9] - Paziureti visa eile (testavimui)\n\n");
 
         printf("Iveskite komandos numeri ir paspauskite Enter: ");
         scanf("%d", &command);
@@ -23,7 +27,7 @@ int main()
         switch (command)
         {
         case 1:
-            i = 0;
+            i = 1;
 
             while(pqList[i] != NULL)
                 i++;
@@ -34,7 +38,7 @@ int main()
             printf("-> Prideta nauja prioritetine eile su indeksu #%d\n", i);
             break;
         case 2:
-            pqChoice = chooseQ(pqList, pqListSize);
+            pqChoice = chooseQ(pqList, pqListSize, errorCodes);
             if(pqChoice == -1)
                 break;
          
@@ -45,7 +49,7 @@ int main()
 
             break;
         case 3:
-            pqChoice = chooseQ(pqList, pqListSize);
+            pqChoice = chooseQ(pqList, pqListSize, errorCodes);
             if(pqChoice == -1)
                 break;
                      
@@ -56,41 +60,41 @@ int main()
 
             break;
         case 4:
-            pqChoice = chooseQ(pqList, pqListSize);
+            pqChoice = chooseQ(pqList, pqListSize, errorCodes);
             if(pqChoice == -1)
                 break;
             
-            printf("Iveskite per tarpa nauja reiksme ir jos prioriteta (mazesnis skaicius = didesnis prioritetas), paspauskite Enter:\n");
+            printf("Iveskite per tarpa nauja reiksme ir jos prioriteta(>0), (abu skaiciai turi buti sveikieji; didesnis prioriteto skaicius = didesnis prioritetas), paspauskite Enter:\n");
             scanf("%d %d", &newValue, &newPr);
           
             if(insert(pqList[pqChoice], newValue, newPr) == 1)
                 printf("-> Naujas elementas sekmingai pridetas i eile #%d\n", pqChoice);
             else
-                printf("-> Naujas elementas nebuvo pridetas, nes eile #%d pilna\n", pqChoice);
+                printf("-> Error #4: %s", errorCodes[3], pqChoice);
 
             break;
         case 5:
-            pqChoice = chooseQ(pqList, pqListSize);
+            pqChoice = chooseQ(pqList, pqListSize, errorCodes);
             if(pqChoice == -1)
                 break;
       
             if(pop(pqList[pqChoice], &poppedValue) == 1)
                 printf("-> Virsutinis elementas sekmingai pasalintas is eiles #%d, jo reiksme: %d\n", pqChoice, poppedValue);
             else
-                printf("-> Virsutinis elementas nebuvo pasalintas, nes eile #%d tuscia\n", pqChoice);
+                printf("-> Error #5: %s", errorCodes[4]);
             break;
         case 6:
-            pqChoice = chooseQ(pqList, pqListSize);
+            pqChoice = chooseQ(pqList, pqListSize, errorCodes);
             if(pqChoice == -1)
                 break;
    
             if(peek(pqList[pqChoice], &value, &pr) == 1)
                 printf("-> Virsutinio eiles #%d elemento reiksme: %d, prioritetas: %d\n", pqChoice, value, pr);
             else
-                printf("-> Virsutinio elemento nera, eile #%d tuscia\n", pqChoice);
+                printf("-> Error #6: %s", errorCodes[5]);
             break;
         case 7:
-            pqChoice = chooseQ(pqList, pqListSize);
+            pqChoice = chooseQ(pqList, pqListSize, errorCodes);
             if(pqChoice == -1)
                 break;
             
@@ -106,9 +110,16 @@ int main()
             printf("-> Programa uzdaryta\n");
             loop = 0;
 
-            break;  
+            break;
+        case 9:
+            pqChoice = chooseQ(pqList, pqListSize, errorCodes);
+            if(pqChoice == -1)
+                break;
+
+            printQ(pqList[pqChoice]);
+            break;
         default:       
-            printf("Tokia komanda neegzistuoja\n");
+            printf("-> Error #1: %s\n",errorCodes[0]);
             break;
         }
     }
@@ -118,19 +129,19 @@ int main()
 
 void printIndex(priorityQueue* pqList[])
 {
-    for(int i = 0; i < 100; i++)
+    for(int i = 1; i < 100; i++)
     {
         if(pqList[i] != NULL)
             printf("#%d ",i);
     }
 }
 
-int chooseQ(priorityQueue* pqList[], int pqListSize)
+int chooseQ(priorityQueue* pqList[], int pqListSize, char errorCodes[10][100])
 {
     int pqChoice;
     if(pqListSize == 0)
     {
-        printf("Nesukurta jokiu prioritetiniu eiliu\n");
+        printf("-> Error #2: %s", errorCodes[1]);
         return -1;
     }
     printf("Galimos eiles: ");
@@ -141,9 +152,21 @@ int chooseQ(priorityQueue* pqList[], int pqListSize)
 
     if(pqList[pqChoice] == NULL || pqChoice < 0 || pqChoice > 99)
     {
-        printf("Eile #%d neegzistuoja\n",pqChoice);
+        printf("-> Error #3: %s",errorCodes[2]);
         return -1;
     }
 
     return pqChoice;
+}
+
+void printQ(priorityQueue *pq)
+{
+    node* nextNode = pq->front;
+    printf("front ->");
+    while(nextNode != NULL)
+    {
+        printf(" %d(%d) ",nextNode->value, nextNode->priority);
+        nextNode = nextNode->next;
+    }
+    printf("\n");
 }

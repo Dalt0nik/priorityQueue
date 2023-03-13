@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "priorityQueue.h"
 
+// be argumentu, grazina sukurtos eiles rodykle
 priorityQueue* createQ()
 {
     priorityQueue* newPQ;
@@ -9,7 +10,8 @@ priorityQueue* createQ()
     newPQ->front = NULL;
     return newPQ;
 }
-
+// arg1 - eiles rodykle
+// grazina: 1 - yra tuscia, 0 - nera tuscia
 int isEmpty(priorityQueue* pq)
 {
     if(pq->front == NULL)
@@ -17,7 +19,8 @@ int isEmpty(priorityQueue* pq)
     else
         return 0;
 }
-
+// arg1 - eiles rodykle
+// grazina: 1 - yra pilna, 0 - nera pilna
 int isFull(priorityQueue* pq)
 {
     priorityQueue* temp = NULL;
@@ -31,14 +34,15 @@ int isFull(priorityQueue* pq)
     else
         return 1;  
 }
-
+// arg1 - eiles rodykle, arg2 - naujo elemento reiksme, arg3 - naujo elemento pr.
+// grazina: 1 - sekmingai idetas, 0 - neidetas, si eile yra pilna
 int insert(priorityQueue* pq, int newValue, int newPriority)
 {
     if(isFull(pq) == 1)
         return 0;
 
 
-    if(pq->front == NULL || pq->front->priority > newPriority)
+    if(pq->front == NULL || pq->front->priority < newPriority)
     {
         node* temp = pq->front;
         pq->front = (node*)malloc(sizeof(node));
@@ -51,7 +55,7 @@ int insert(priorityQueue* pq, int newValue, int newPriority)
     node* current;
     current = pq->front;
 
-    while(current->next != NULL && current->next->priority <= newPriority)
+    while(current->next != NULL && current->next->priority >= newPriority)
     {
         current = current->next;
     }
@@ -64,7 +68,8 @@ int insert(priorityQueue* pq, int newValue, int newPriority)
     current->next = newNode;
     return 1;
 }
-
+// arg1 - eiles rodykle, arg2 - rodykle i kintamaji, i kuri bus patalpinama virs. elemento reiksme
+// grazina: 1 - sekmingai pasalintas, 0 - nepasalintas, eile tuscia
 int pop(priorityQueue* pq, int* poppedValue)
 {
     if(isEmpty(pq) == 1)
@@ -77,7 +82,8 @@ int pop(priorityQueue* pq, int* poppedValue)
     free(temp);
     return 1;
 }
-
+// arg1 - eiles rodykle, arg2 - rodykle i reiksmes kint., arg3 - rodykle i prioriteto kint.
+// grazina: 1 - sekmingai ivyko, 0 - eile tuscia
 int peek(priorityQueue* pq, int* topValue, int* topPriority)
 {
     if(isEmpty(pq) == 1)
@@ -88,7 +94,7 @@ int peek(priorityQueue* pq, int* topValue, int* topPriority)
 
     return 1;
 }
-
+// arg1 - eiles rodykle
 int deleteQ(priorityQueue* pq)
 {
     if(isEmpty(pq) == 1)
